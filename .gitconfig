@@ -1,0 +1,10 @@
+[user]
+	name = XuWentao
+	emall = wtao.xu@gmail.com
+	email = wtao.xu@gmail.com
+[alias]
+	ci = commit
+	co = checkout
+	st = status 
+	df = icdiff
+	ps = push --set-upstream
