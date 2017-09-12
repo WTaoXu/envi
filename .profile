@@ -3,13 +3,13 @@ export GOROOT="/usr/local/go"
 export GOPATH="/Users/xuwentao/Projects"
 
 # project envi
-BASE=$PWD
+BASE=$GITHUB_DIR"/wentaoxu/envi"
 PINGCAP_DIR=$GOPATH"/src/github.com/pingcap"
 TIDB_DIR=$PINGCAP_DIR"/tidb"
 TIKV_DIR=$PINGCAP_DIR"/tikv"
 PD_DIR=$PINGCAP_DIR"/pd"
 WORK_DIR=$HOME"/WorkPlace"
-SCRIPT_DIR=$HOME"/Scripts"
+SCRIPT_DIR=$BASE"/Scripts"
 
 # common envi
 PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
@@ -37,7 +37,7 @@ alias ll='ls -l'
 alias la='ls -A'                                                         
 alias l='ls -CF'
 
-alias gcc="/usr/local/bin/gcc-7"
+alias gcc='/usr/local/bin/gcc-7'
 alias cc='/usr/local/bin/gcc-7'
 alias g++='/usr/local/bin/g++-7'
 alias c++='/usr/local/bin/c++-7'
@@ -46,5 +46,4 @@ alias ctags='/usr/local/bin/ctags'
 
 # source other file
 source $BASE/Scripts/set_env.sh
-source $BASE/.git-completion.sh
-source $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
