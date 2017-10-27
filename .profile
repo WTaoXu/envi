@@ -22,6 +22,8 @@ PATH="$HOME/.cargo/bin:$PATH"
 PATH="$BASE/.bin:${PATH}"
 export PATH
 
+export http_proxy="http://172.16.10.1:8123/"
+export https_proxy="http://172.16.10.1:8123/"
 #sudo launchctl limit maxfiles 100000 500000
 #sudo ulimit -n 100000
 

@@ -1,4 +1,5 @@
 #!/bin/zsh
+RAMFS="/ramfs"
 
 function build()
 {
@@ -15,7 +16,7 @@ function build()
                 \cp -f ${TIDB_DIR}/bin/tidb-server ${HOME}/.bin/
         elif [[ ${target} = "tikv" ]]; then
                 cd ${TIKV_DIR}
-                make
+                make static_release
                 cd -
                 \cp -f ${TIKV_DIR}/bin/* ${HOME}/.bin/
         elif [[ ${target} = "pd" ]]; then
@@ -57,25 +58,25 @@ function start()
                 return
         fi
 
-        start_tidb_cmd="${TIDB_DIR}/bin/tidb-server --perfschema --store=tikv --path='127.0.0.1:2379' --log-file=${WORK_DIR}/tidb.log &"
+        start_tidb_cmd="${TIDB_DIR}/bin/tidb-server --config=${WORK_DIR}/tidb.toml --store=tikv --path='127.0.0.1:2379' --log-file=${RAMFS}/tidb.log &"
         start_tikv_cmd="${TIKV_DIR}/bin/tikv-server --pd='127.0.0.1:2379' --data-dir=${WORK_DIR}/tikv --log-file=${WORK_DIR}/tikv.log &"
         start_pd_cmd="${PD_DIR}/bin/pd-server --data-dir='${WORK_DIR}/pd' --log-file='${WORK_DIR}/pd.log' &"
 
         echo "start "${target}
         if [[ ${target} = "tidb" ]]; then
-                rm -rf $WORK_DIR"/tidb"
+                rm -rf ${WORK_DIR}"/tidb"
                 sh -c "${start_tidb_cmd}"
         elif [[ ${target} = "tikv" ]]; then
-                rm -rf $WORK_DIR"/tikv"
+                rm -rf ${WORK_DIR}"/tikv"
                 sh -c "${start_tikv_cmd}"
         elif [[ ${target} = "pd" ]]; then
-                rm -rf $WORK_DIR"/pd"
+                rm -rf ${WORK_DIR}"/pd"
                 sh -c "${start_pd_cmd}"
         elif [[ ${target} = "mysql" ]]; then
                 if [[ ! -e ${WORK_DIR}/mysql ]]; then
                         mysqld --initialize --datadir=${WORK_DIR}/mysql
                 fi
-                mysqld --skip-grant-tables --datadir=${WORK_DIR}/mysql
+                mysqld --skip-grant-tables --general-log --general-log-file=${WORK_DIR}/myQuery.log --datadir=${WORK_DIR}/mysql 2>&1 >${WORK_DIR}/my.log
         elif [[ ${target} = "pg" ]]; then
                 if [[ ! -e ${WORK_DIR}/pg ]]; then
                         intidb -D ${WORK_DIR}/pg
@@ -148,10 +149,10 @@ function xconnect()
                 return
         fi
 
-        if [[ ${target} = "myqsl" ]]; then
-                mysqlsh -h 127.0.0.1 -P 4000 -u root -D test
-        elif [[ ${target} = "tidb" ]]; then
+        if [[ ${target} = "tidb" ]]; then
                 mysqlsh --uri root@localhost:14000/test
+        elif [[ ${target} = "mysql" ]]; then
+                mysqlsh --uri root@localhost:33060/mysql
         fi
 }
 
