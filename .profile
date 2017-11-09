@@ -1,7 +1,3 @@
-# go envi
-export GOROOT="/usr/local/go"
-export GOPATH="/Users/xuwentao/Projects"
-
 # project envi
 BASE=$GITHUB_DIR"/wentaoxu/envi"
 PINGCAP_DIR=$GOPATH"/src/github.com/pingcap"
@@ -10,6 +6,10 @@ TIKV_DIR=$PINGCAP_DIR"/tikv"
 PD_DIR=$PINGCAP_DIR"/pd"
 WORK_DIR=$HOME"/WorkPlace"
 SCRIPT_DIR=$BASE"/Scripts"
+
+# go envi
+export GOROOT="/usr/local/go"
+export GOPATH="/Users/xuwentao/Projects"
 
 # common envi
 PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
@@ -22,8 +22,6 @@ PATH="$HOME/.cargo/bin:$PATH"
 PATH="$BASE/.bin:${PATH}"
 export PATH
 
-export http_proxy="http://172.16.10.1:8123/"
-export https_proxy="http://172.16.10.1:8123/"
 #sudo launchctl limit maxfiles 100000 500000
 #sudo ulimit -n 100000
 

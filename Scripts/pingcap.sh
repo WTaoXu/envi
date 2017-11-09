@@ -50,22 +50,26 @@ function tiinit()
         fi
 }
 
+start_mock_cmd="${TIDB_DIR}/bin/tidb-server --store=mocktikv --path=${WORK_DIR}/mock --log-file=${RAMFS}/tidb-mock.log &"
+start_tidb_cmd="${TIDB_DIR}/bin/tidb-server --config=${WORK_DIR}/tidb.toml --store=tikv --path='127.0.0.1:2379' --log-file=${RAMFS}/tidb.log &"
+start_tikv_cmd="${TIKV_DIR}/bin/tikv-server --pd='127.0.0.1:2379' --data-dir=${WORK_DIR}/tikv --log-file=${WORK_DIR}/tikv.log &"
+start_pd_cmd="${PD_DIR}/bin/pd-server --config=${WORK_DIR}/pd.toml --data-dir='${WORK_DIR}/pd' --log-file='${WORK_DIR}/pd.log' &"
+
 function start()
 {
         target=${1}
         if [[ -z ${target} ]]; then
-                echo "must have one parameter, like tidb,tikv,pd,tiall,mysql"
+                echo "must have one parameter, like tidb,mock,tikv,pd,tiall,mysql"
                 return
         fi
-
-        start_tidb_cmd="${TIDB_DIR}/bin/tidb-server --config=${WORK_DIR}/tidb.toml --store=tikv --path='127.0.0.1:2379' --log-file=${RAMFS}/tidb.log &"
-        start_tikv_cmd="${TIKV_DIR}/bin/tikv-server --pd='127.0.0.1:2379' --data-dir=${WORK_DIR}/tikv --log-file=${WORK_DIR}/tikv.log &"
-        start_pd_cmd="${PD_DIR}/bin/pd-server --data-dir='${WORK_DIR}/pd' --log-file='${WORK_DIR}/pd.log' &"
 
         echo "start "${target}
         if [[ ${target} = "tidb" ]]; then
                 rm -rf ${WORK_DIR}"/tidb"
                 sh -c "${start_tidb_cmd}"
+        elif [[ ${target} = "mock" ]]; then
+                rm -rf ${WORK_DIR}"/mock"
+                sh -c "${start_mock_cmd}"
         elif [[ ${target} = "tikv" ]]; then
                 rm -rf ${WORK_DIR}"/tikv"
                 sh -c "${start_tikv_cmd}"
@@ -92,6 +96,24 @@ function start()
                 rm -rf $WORK_DIR"/tidb"
                 sh -c "${start_tidb_cmd}"
         else
+                echo "invalid parameter, need to be tidb,mock,tikv,pd,tiall,mysql"
+        fi
+}
+
+function restart()
+{
+        target=${1}
+        if [[ -z ${target} ]]; then
+                echo "must have one parameter, like tidb,tikv,pd,tiall,mysql"
+                return
+        fi
+
+        echo "restart "${target}
+        if [[ ${target} = "tidb" ]]; then
+                killall -9 tidb-server
+                rm -rf ${WORK_DIR}"/tidb"
+                sh -c "${start_tidb_cmd}"
+        else
                 echo "invalid parameter, need to be tidb,tikv,pd,tiall,mysql"
         fi
 }
@@ -103,10 +125,14 @@ function tikill()
                 echo "must have one parameter, like tidb,tikv,pd,all"
                 return
         fi
+        
+        kill_tidb_cmd="killall -9 tidb-server"
+        kill_tikv_cmd="killall -9 tikv-server"
+        kill_pd_cmd="killall -9 pd-server"
 
-        kill_tidb_cmd="ps ux |grep $USER |grep tidb-server |grep -v grep |awk '{print $2}' |xargs kill -9"
-        kill_tikv_cmd="ps ux |grep $USER |grep tikv-server |grep -v grep |awk '{print $2}' |xargs kill -9"
-        kill_pd_cmd="ps ux |grep $USER |grep pd-server |grep -v grep |awk '{print $2}' |xargs kill -9"
+        #kill_tidb_cmd="ps ux |grep $USER |grep tidb-server |grep -v grep |awk '{print $2}' |xargs kill -9"
+        #kill_tikv_cmd="ps ux |grep $USER |grep tikv-server |grep -v grep |awk '{print $2}' |xargs kill -9"
+        #kill_pd_cmd="ps ux |grep $USER |grep pd-server |grep -v grep |awk '{print $2}' |xargs kill -9"
 
         echo "kill "${target}
         if [[ ${target} = "tidb" ]]; then

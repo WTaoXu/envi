@@ -8,7 +8,8 @@
 	st = status 
 	df = icdiff
 	dfc = icdiff --cached
-	ps = push --set-upstream
+        ps = push --set-upstream
+        cp = cherry-pick
 [core]
 	safecrlf = true
 	autocrlf = input
