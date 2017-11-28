@@ -50,7 +50,7 @@ function tiinit()
         fi
 }
 
-start_mock_cmd="${TIDB_DIR}/bin/tidb-server --store=mocktikv --path=${WORK_DIR}/mock --log-file=${RAMFS}/tidb-mock.log &"
+start_mock_cmd="${TIDB_DIR}/bin/tidb-server --config=${WORK_DIR}/tidb.toml --store=mocktikv --path=${WORK_DIR}/mock --log-file=${RAMFS}/tidb-mock.log &"
 start_tidb_cmd="${TIDB_DIR}/bin/tidb-server --config=${WORK_DIR}/tidb.toml --store=tikv --path='127.0.0.1:2379' --log-file=${RAMFS}/tidb.log &"
 start_tikv_cmd="${TIKV_DIR}/bin/tikv-server --pd='127.0.0.1:2379' --data-dir=${WORK_DIR}/tikv --log-file=${WORK_DIR}/tikv.log &"
 start_pd_cmd="${PD_DIR}/bin/pd-server --config=${WORK_DIR}/pd.toml --data-dir='${WORK_DIR}/pd' --log-file='${WORK_DIR}/pd.log' &"

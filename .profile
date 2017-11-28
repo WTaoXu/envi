@@ -47,3 +47,11 @@ alias ctags='/usr/local/bin/ctags'
 # source other file
 source $BASE/Scripts/set_env.sh
 source $ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# idc proxy
+## dongshengkejiyuan idc
+#export http_proxy="http://172.16.10.1:8123/"
+#export https_proxy="http://172.16.10.1:8123/"
+## shangdi idc
+export http_proxy="http://172.16.20.1:8123"
+export https_proxy="http://172.16.20.1:8123"
